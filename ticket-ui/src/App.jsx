@@ -4,10 +4,10 @@ import { useSuiClient, useWallet } from '@mysten/wallet-kit';
 // D:/sui/my_first_move_project/ticket-ui/src/App.jsx
 import { WalletKitProvider } from "@mysten/wallet-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
-import BuyTicket from "./ticket-ui/BuyTicket"; // <--- Corrected path
-import CreateEvent from "./ticket-ui/CreateEvent"; // <--- Corrected path
-import UseTicket from "./ticket-ui/UseTicket"; // <--- Corrected path
-import DeleteTicket from './ticket-ui/DeleteTicket'; // New import
+import BuyTicket from "./pages/BuyTicket"; // <--- Corrected path
+import CreateEvent from "./pages/CreateEvent"; // <--- Corrected path
+import UseTicket from "./pages/UseTicket"; // <--- Corrected path
+import DeleteTicket from './pages/DeleteTicket'; // New import
 
 const NETWORK = 'testnet'; 
 const PACKAGE_ID = "0x4c7615b4fec5974860a6b3d10ee9032d3fbac9dbf8c83bf060437fe87bbe9904";
