@@ -1,17 +1,17 @@
 // App.jsx
 import React, { useState, useEffect } from 'react';
 import { useSuiClient, useWallet } from '@mysten/wallet-kit';
-import { WalletKitProvider } from '@mysten/wallet-kit';
-import { getFullnodeUrl } from '@mysten/sui/client';
-import BuyTicket from './ticket.ui/BuyTicket';
-import CreateEvent from './ticket.ui/CreateEvent';
-import UseTicket from './ticket.ui/UseTicket';   // New import
-import DeleteTicket from './ticket.ui/DeleteTicket'; // New import
+// D:/sui/my_first_move_project/ticket-ui/src/App.jsx
+import { WalletKitProvider } from "@mysten/wallet-kit";
+import { getFullnodeUrl } from "@mysten/sui/client";
+import BuyTicket from "./ticket-ui/BuyTicket"; // <--- Corrected path
+import CreateEvent from "./ticket-ui/CreateEvent"; // <--- Corrected path
+import UseTicket from "./ticket-ui/UseTicket"; // <--- Corrected path
+import DeleteTicket from './ticket-ui/DeleteTicket'; // New import
 
-const NETWORK = 'testnet'; // Or 'testnet', 'mainnet'
-const PACKAGE_ID = "0x0"; // <--- IMPORTANT: Replace with your deployed package ID
-const ADMIN_CAP_OBJECT_ID = "0x0";  // <--- IMPORTANT: Replace with your AdminCap object ID
-
+const NETWORK = 'testnet'; 
+const PACKAGE_ID = "0x0"; 
+const ADMIN_CAP_OBJECT_ID = "0x0";  
 function AppContent() {
   const { connected, account, signAndExecuteTransactionBlock } = useWallet();
   const suiClient = useSuiClient();
@@ -25,7 +25,7 @@ function AppContent() {
     try {
       const { data } = await suiClient.getObjects({
         filter: {
-          StructType: `${PACKAGE_ID}::ticket_management::Event`,
+          StructType: `${PACKAGE_ID}::my_first_move_project::Event`,
         },
         options: {
           showContent: true,
@@ -53,7 +53,7 @@ function AppContent() {
       const { data } = await suiClient.getOwnedObjects({
         owner: account.address,
         filter: {
-          StructType: `${PACKAGE_ID}::ticket_management::Ticket`,
+          StructType: `${PACKAGE_ID}::my_first_move_project::Ticket`,
         },
         options: {
           showContent: true,
