@@ -1,6 +1,6 @@
 // ticket.ui/CreateEvent.js
 import React, { useState } from 'react';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { TransactionBlock } from '@mysten/sui/transactions';
 
 function CreateEvent({ suiClient, signAndExecuteTransactionBlock, packageId, adminCapId }) {
   const [eventName, setEventName] = useState('');

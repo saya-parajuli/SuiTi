@@ -1,6 +1,6 @@
 // ticket.ui/UseTicket.js
 import React, { useState } from 'react';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { TransactionBlock } from '@mysten/sui/transactions';
 
 function UseTicket({ suiClient, signAndExecuteTransactionBlock, packageId, ticketId, onSuccess }) {
   const [loading, setLoading] = useState(false);

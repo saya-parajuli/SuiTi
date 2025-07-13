@@ -1,8 +1,8 @@
 // ticket.ui/suiClient.js
 
-import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
-import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
-import { MIST_PER_SUI } from '@mysten/sui.js/utils'; // Useful for SUI calculations
+import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
+//import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
+//import { MIST_PER_SUI } from '@mysten/sui.js/utils'; // Useful for SUI calculations
 
 // Configure your network. Use 'devnet' for development.
 const network = 'testnet'; // or 'testnet', 'mainnet'
