@@ -1,0 +1,90 @@
+
+module my_first_move_project::ticket_management;
+
+//imports
+use std::string;
+
+public struct Event has key{
+    id:UID,
+    event_name:string::String,
+    sold_tickets:vector<ID>
+}
+
+public struct Ticket has key {
+    id:UID,
+    event_id:ID,
+    ticket_number:u64,
+    is_used:bool
+
+}
+
+/*public fun create_event(event_name: string::String,ctx:&mut TxContext) {
+    let event = Event {
+        id: object::new(ctx),
+        event_name:event_name,
+        sold_tickets: vector::empty()
+
+    };
+    //
+    transfer::share_object(event);
+}*/
+
+public fun buy_ticket(event:&mut Event,ctx:&mut TxContext) {
+    let ticket = Ticket {
+        id:object::new(ctx),
+        is_used: false,
+        event_id: object::id(event),
+        ticket_number: event.sold_tickets.length()
+    };
+    event.sold_tickets.push_back(object::id(&ticket));
+    transfer::transfer(ticket,ctx.sender());
+
+}
+
+/*public fun use_ticket(ticket:&mut Ticket) {
+    ticket.is_used =  true;
+}*/
+
+public fun delete_ticket(ticket:Ticket){
+    let Ticket {id, event_id:_, is_used:_, ticket_number:_} = ticket;
+    object::delete(id);
+}
+// Admin Capability for event creation
+    public struct AdminCap has key {
+        id: UID
+    }
+
+// Module initialization to create admin capability
+    fun init(ctx: &mut TxContext) {
+        let admin_cap = AdminCap{
+            id: object::new(ctx)
+        };
+        transfer::transfer(admin_cap, ctx.sender());
+    }
+
+public fun create_event(_: &AdminCap,event_name: string::String,ctx:&mut TxContext) {
+    let event = Event {
+        id: object::new(ctx),
+        event_name:event_name,
+        sold_tickets: vector::empty()
+
+    };
+    //
+    transfer::share_object(event);
+}
+public fun use_ticket(ticket:&mut Ticket) {
+    assert!(!ticket.is_used, ETicketAlreadyUsed);
+    ticket.is_used =  true;
+}
+const ETicketAlreadyUsed: u64 = 0;
+
+
+/*
+/// Module: my_first_move_project
+module my_first_move_project::my_first_move_project;
+*/
+
+// For Move coding conventions, see
+// https://docs.sui.io/concepts/sui-move-concepts/conventions
+
+
