@@ -9,8 +9,8 @@ import UseTicket from './ticket.ui/UseTicket';   // New import
 import DeleteTicket from './ticket.ui/DeleteTicket'; // New import
 
 const NETWORK = 'devnet'; // Or 'testnet', 'mainnet'
-const PACKAGE_ID = "YOUR_PACKAGE_ID"; // <--- IMPORTANT: Replace with your deployed package ID
-const ADMIN_CAP_OBJECT_ID = "YOUR_ADMIN_CAP_OBJECT_ID"; // <--- IMPORTANT: Replace with your AdminCap object ID
+const PACKAGE_ID = "0x52fe6637bd1e8611ba44af977b264c4c6ae8f3306efccdc9d2e5a5cdce209edf"; // <--- IMPORTANT: Replace with your deployed package ID
+const ADMIN_CAP_OBJECT_ID = "0x01c087092797cb0e059ff6bdaa01cdd6c5fc4cdb1b4945842c80eb38c0efc7ec";  // <--- IMPORTANT: Replace with your AdminCap object ID
 
 function AppContent() {
   const { connected, account, signAndExecuteTransactionBlock } = useWallet();

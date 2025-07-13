@@ -1,74 +1,64 @@
-import { useWalletKit } from "@mysten/wallet-adapter-react";
-import { TransactionBlock } from "@mysten/sui";
-import { useState } from "react";
-import { Button } from "../components/ui/button";
+// ticket.ui/BuyTicket.js
+import React, { useState } from 'react';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
 
-function BuyTicket() {
-  const { currentAccount, signAndExecuteTransactionBlock, connect, connected } = useWalletKit();
-  const [eventId, setEventId] = useState("");
-  const [status, setStatus] = useState("");
+function BuyTicket({ suiClient, signAndExecuteTransactionBlock, packageId, eventId, eventName }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  const handleBuy = async () => {
-    if (!connected) {
-      await connect();
-    }
-
-    if (!eventId) {
-      setStatus("❌ Please enter Event Object ID");
-      return;
-    }
-
-    const txb = new TransactionBlock();
-
-    // 🔁 Replace this with your actual deployed package ID
-    const packageId = "0x52fe6637bd1e8611ba44af977b264c4c6ae8f3306efccdc9d2e5a5cdce209edf";
-
-    txb.moveCall({
-      target: `${packageId}::ticket_management::buy_ticket`,
-      arguments: [txb.object(eventId)],
-    });
+  const handleBuyTicket = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
 
     try {
-      setStatus("📡 Sending transaction...");
+      const tx = new TransactionBlock();
+      tx.moveCall({
+        target: `${packageId}::ticket_management::buy_ticket`,
+        arguments: [
+          tx.object(eventId), // Pass the Event object ID
+        ],
+      });
 
       const result = await signAndExecuteTransactionBlock({
-        transactionBlock: txb,
+        transactionBlock: tx,
+        requestType: 'WaitForLocalExecution',
         options: {
           showEffects: true,
           showEvents: true,
         },
       });
 
-      console.log(result);
-      setStatus(`✅ Success! Digest: ${result.digest}`);
-    } catch (e) {
-      console.error(e);
-      setStatus("❌ Failed to buy ticket");
+      console.log('Buy Ticket Transaction Result:', result);
+      if (result.effects?.status.status === 'success') {
+        // You can parse the events to find the newly created ticket ID if needed
+        const newTicketObjectId = result.effects.created?.[0]?.reference.objectId; // Example: assuming the first created object is the ticket
+        setSuccess(`Successfully bought a ticket for '${eventName}'! Ticket ID: ${newTicketObjectId}`);
+        // You might want to refresh event data to show updated sold_tickets count
+      } else {
+        setError(`Transaction failed: ${result.effects?.status.error || 'Unknown error'}`);
+      }
+
+    } catch (err) {
+      console.error('Error buying ticket:', err);
+      setError(`Failed to buy ticket: ${err.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 border rounded-xl space-y-4 bg-white shadow">
-      <h2 className="text-xl font-bold">Buy Ticket 🎟️</h2>
-
-      <input
-        value={eventId}
-        onChange={(e) => setEventId(e.target.value)}
-        placeholder="Enter Event Object ID"
-        className="w-full border p-2 rounded"
-      />
-
-      <Button onClick={handleBuy}>
-        {connected ? "Buy Ticket" : "Connect Wallet to Buy"}
-      </Button>
-
-      {currentAccount && (
-        <p className="text-sm text-gray-500">
-          Connected: {currentAccount.address}
-        </p>
-      )}
-
-      <p className="text-sm">{status}</p>
+    <div className="mt-4">
+      <button
+        onClick={handleBuyTicket}
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
+        disabled={loading}
+      >
+        {loading ? 'Buying...' : 'Buy Ticket'}
+      </button>
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+      {success && <p className="text-green-500 text-sm mt-2">{success}</p>}
     </div>
   );
 }
